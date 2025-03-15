@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import os
-from nerbius_api import send_image
+from nebius_api import send_image
 
 app = Flask(__name__)
 
