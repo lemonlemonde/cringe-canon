@@ -6,9 +6,10 @@ import path from "path";
 export async function POST(request) {
   const formData = await request.formData();
   const file = formData.get("file");
+  const description = formData.get("description")
 
-  if (!file) {
-    return Response.json({ message: "No file received" }, { status: 400 });
+  if (!file || !description) {
+    return Response.json({ message: "No file or description received" }, { status: 400 });
   }
 
   // const bytes = await file.arrayBuffer();

@@ -1,13 +1,30 @@
 "use client";
 
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+
 import Header from "./components/header";
 
 export default function Home() {
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [description, setDescription] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
+  const handleResponse = (data) => {
+    setLoading(false)
+    if (!data.flaskResponse.response) {
+        console.error("Couldn't find API response")
+    }
+    // handle the API response
+    console.log("ACTUAL PROFILE:", data.flaskResponse.response)
+
+
+    setProfile(data.flaskResponse.response)
+  }
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -18,15 +35,19 @@ export default function Home() {
   };
 
   const handleChooseFile = () => {
-    // This opens the hidden input when button is clicked
+    // This uses the actual hidden input when 'Choose Image' button clicked
     inputRef.current.click();
   };
 
   const handleUpload = async () => {
     if (!file) return alert("No file selected!");
+    if (!description) return alert("No description given!")
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("description", description);
+
+    setLoading(true)
 
     // give it to the nextjs backend!
     try {
@@ -41,9 +62,11 @@ export default function Home() {
       // TODO: do something with the data!
         // hopefully the model returned two sections:
           // "PROFILE:" and "BACKGROUND:"
+      handleResponse(data);
 
     } catch (e) {
       console.error("Uploading error:", e)
+      setLoading(false)
     }
   };
 
@@ -58,7 +81,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 md:items-start max-w-screen-lg w-full space-y-5">
         <div className="flex md:flex-row flex-col w-full md:space-x-5 space-y-5">
           {/* image */}
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full md:w-xl space-y-2">
             <input
               ref={inputRef}
               type="file"
@@ -80,7 +103,7 @@ export default function Home() {
           </div>
           
           {/* description input box */}
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full md:pt-10">
             <label htmlFor="textInput" className="mb-2 text-lg text-gray-400">
               Description:
             </label>
@@ -88,6 +111,7 @@ export default function Home() {
               type="text"
               id="textInput"
               rows="12"
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g., Jackie is a mechanic specializing in fixing ghost-bikes..."
               className="p-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -101,6 +125,37 @@ export default function Home() {
         >
           Upload
         </button>
+
+        {/* profile */}
+        <div className="flex flex-col w-full">
+        
+          {/* default placeholder */}
+          {!loading && !profile && (
+            <div className="w-full border p-4 rounded">
+              {/* Example content */}
+              <h2 className="text-lg font-bold">Profile?</h2>
+              <p className="text-gray-400">Upload your drawing and write a description to get your very own, totally canon, character profile!</p>
+            </div>
+          )}
+
+          {/* Loading thing */}
+          {loading && (
+            <div className="w-full border p-4 rounded">
+              {/* Example content */}
+              <h2 className="text-lg font-bold animate-pulse">✨ Generating profile... ✨</h2>
+            </div>
+          )}
+
+          {/* actual results */}
+          {!loading && profile && (
+            <div className="w-full prose prose-invert max-w-none px-5">
+              <ReactMarkdown>
+                {profile}
+              </ReactMarkdown>
+            </div>
+          )}
+            
+        </div>
 
       </main>
     </div>

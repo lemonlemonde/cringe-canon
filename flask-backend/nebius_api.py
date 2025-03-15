@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 import base64
 
-def send_image(file_path, user_input):
+def send_image(file_path, description):
     
     # get local .env vars
     load_dotenv()
@@ -20,10 +20,10 @@ def send_image(file_path, user_input):
         api_key=os.environ.get("NEBIUS_API_KEY")
     )
     
-    user_input = str(user_input)
+    description = str(description)
 
     response = client.chat.completions.create(
-        model="llava-hf/llava-1.5-7b-hf",
+        model="Qwen/Qwen2-VL-72B-Instruct",
         max_tokens=512,
         temperature=0.6,
         top_p=0.9,
@@ -33,12 +33,12 @@ def send_image(file_path, user_input):
         messages=[
             {
                 "role": "system",
-                "content": "You are given a drawing of an Original character (OC) with a brief explanation. Use the traits that you identify in the drawing to make a character profile (name, pronouns, occupation, education, personality, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. And a paragraph backstory. Format it with '## PROFILE' and '## BACKGROUND'."
+                "content": "You are given a drawing of an Original character (OC) with a brief explanation. Use the traits that you identify in the drawing to make a character profile (name, pronouns, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. And a paragraph backstory with worldbuilding and with traits you see in the drawing. Format it with '## PROFILE' and '## BACKGROUND'."
             },
             {
                 "role": "user",
                 "content": [
-                    { "type": "text", "text": user_input },
+                    { "type": "text", "text": description },
                     {
                         "type": "image_url",
                         "image_url": {
