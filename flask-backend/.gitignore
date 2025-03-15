@@ -1,0 +1,5 @@
+# use brain and don't push api key to github again 
+.env
+.DS_Store
+__pycache__
+uploads
