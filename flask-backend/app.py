@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import os
+from nerbius_api import send_image
 
 app = Flask(__name__)
 
@@ -21,13 +22,18 @@ def upload_file():
     # Save the file
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
+    
+    # nebius api
+    # TODO: get user input from frontend too
+    user_input = "This is Phi, she has 9 mechanical tails, and is an algorithmic-witch."
+    response = send_image(file_path, user_input)
 
-    # You can process the file here (e.g., image recognition, etc.)
-    # For now, we just return the filename
+    # return so we know it's all good
     return jsonify({
-        'message': 'File received successfully',
+        'message': 'Received API response successfully',
         'filename': file.filename,
-        'path': file_path
+        'path': file_path,
+        'response': response,
     }), 200
 
 

@@ -14,7 +14,7 @@ npm run dev
 cd flask-backend
 conda create -n cringe-canon python=3.10.15
 conda activate cringe-canon
-pip install flask
+pip install flask openai
 
 python app.py
 ```

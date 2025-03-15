@@ -36,6 +36,11 @@ export default function Home() {
 
       const data = await res.json();
       console.log("Response:", data);
+
+      // TODO: do something with the data!
+        // hopefully the model returned two sections:
+          // "PROFILE:" and "BACKGROUND:"
+
     } catch (e) {
       console.error("Uploading error:", e)
     }
