@@ -27,13 +27,18 @@ export default function Home() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    // give it to the nextjs backend!
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await res.json();
-    console.log("Response:", data);
+      const data = await res.json();
+      console.log("Response:", data);
+    } catch (e) {
+      console.error("Uploading error:", e)
+    }
   };
 
   return (
