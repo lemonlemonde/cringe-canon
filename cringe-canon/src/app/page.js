@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import Header from "./components/header";
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -47,33 +48,61 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* <input className="bg-blue-500 hover:bg-blue-600" type="file" accept="image/*" onChange={handleFileChange} /> */}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-      />
 
-      {/* Custom button to trigger file input */}
-      <button
-        onClick={handleChooseFile}
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-      >
-        Choose Image
-      </button>
+    <div className="grid grid-rows-[20px_1fr_20px] items-start justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="flex-col justify-items-center">
+        <i>Welcome to</i>
+        <Header />
+      </div>
 
-      {preview && (
-        <img src={preview} alt="Preview" className="w-64 h-auto rounded-lg" />
-      )}
-      <button
-        onClick={handleUpload}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Upload
-      </button>
+      <main className="flex flex-col gap-8 row-start-2 md:items-start max-w-screen-lg w-full space-y-5">
+        <div className="flex md:flex-row flex-col w-full md:space-x-5 space-y-5">
+          {/* image */}
+          <div className="flex flex-col">
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            {/* button triggers input above */}
+            <button
+              onClick={handleChooseFile}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              Choose Image
+            </button>
+
+            {preview && (
+              <img src={preview} alt="Preview" className="w-xl h-auto rounded-lg" />
+            )}
+          </div>
+          
+          {/* description input box */}
+          <div className="flex flex-col w-full">
+            <label htmlFor="textInput" className="mb-2 text-lg text-gray-400">
+              Description:
+            </label>
+            <textarea
+              type="text"
+              id="textInput"
+              rows="12"
+              placeholder="e.g., Jackie is a mechanic specializing in fixing ghost-bikes..."
+              className="p-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+        </div>
+        
+        {/* upload button */}
+        <button
+          onClick={handleUpload}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Upload
+        </button>
+
+      </main>
     </div>
   );
 }
