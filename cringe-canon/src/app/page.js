@@ -13,6 +13,7 @@ export default function Home() {
   const [preview, setPreview] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [genImg, setGenImg] = useState(null);
 
   const handleResponse = (data) => {
     setLoading(false)
@@ -20,10 +21,9 @@ export default function Home() {
         console.error("Couldn't find API response")
     }
     // handle the API response
-    console.log("ACTUAL PROFILE:", data.flaskResponse.response)
+    console.log("ACTUAL PROFILE:", data.flaskResponse.profile)
 
-
-    setProfile(data.flaskResponse.response)
+    setProfile(data.flaskResponse.profile)
   }
 
   const handleFileChange = (e) => {
@@ -65,6 +65,30 @@ export default function Home() {
       console.error("Uploading error:", e)
       setLoading(false)
     }
+
+    const imgFormData = new FormData();
+    imgFormData.append("profile", profile);
+
+    // request img now
+    try {
+      const res = await fetch("/api/getimg", {
+        method: "POST",
+        body: imgFormData,
+      });
+
+      const data = await res.json();
+      console.log("Response:", data);
+
+      if (data.flaskResponse.new_img) {
+        // should be base64, no need to decode
+        console.log("GOT IMG")
+        setGenImg(`data:image/webp;base64,${data.flaskResponse.new_img}`);
+      }
+    } catch (e) {
+      console.error("Uploading error:", e)
+      setLoading(false)
+    }
+
   };
 
   return (
@@ -154,14 +178,14 @@ export default function Home() {
             
         </div>
 
+        {/* generated img */}
+        <div className="flex flex-col w-full">
+            {genImg && (
+              <img src={genImg} alt="generated image" className="w-xl h-auto rounded-lg" />
+            )}
+        </div>
+
       </main>
     </div>
   );
 }
-
-
-
-
-// export default function ImageUploader() {
-  
-// }

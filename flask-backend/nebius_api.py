@@ -21,7 +21,8 @@ def send_image(file_path, description):
     )
     
     response = client.chat.completions.create(
-        model="Qwen/Qwen2-VL-72B-Instruct",
+        # model="Qwen/Qwen2-VL-72B-Instruct",
+        model="Qwen/QVQ-72B-preview",
         temperature=0.6,
         max_tokens=1024,
         top_p=0.9,
@@ -31,7 +32,7 @@ def send_image(file_path, description):
         messages=[
             {
                 "role": "system",
-                "content": "You are given a drawing of a character and a short description. Bulletpoint identify things you see in the drawing that are relevant to making a character profile. In addition, try to identify anything like name, age, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote, and don't include sections that are 'unknown'."
+                "content": "You are given a drawing of a character and a short description. Bulletpoint identify things you see in the drawing that are relevant to making a character profile. In addition, try to identify anything like name, age, species, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote, and don't include sections that are 'unknown'."
             },
             {
                 "role": "user",
@@ -68,7 +69,7 @@ def send_prompt(user_description, vlm_description):
     response = client.chat.completions.create(
         model="mistralai/Mixtral-8x22B-Instruct-v0.1",
         max_tokens=1024,
-        temperature=0.6,
+        temperature=0.8,
         top_p=0.9,
         extra_body={
             "top_k": 50
@@ -76,7 +77,7 @@ def send_prompt(user_description, vlm_description):
         messages=[
             {
                 "role": "system",
-                "content": """Given a description and a list of features about an original character (OC) based on a drawing, produce a character profile (name, age, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. Change the original list of features as needed and make sure no item is 'unknown'. Keep it short. Separately, give a paragraph backstory with worldbuilding based on the features. Format it with '## PROFILE', '## BACKGROUND', and bold the item names with '**'. Be confident."""
+                "content": """Given a description and a list of features about an original character (OC) based on a drawing, produce a character profile (name, age, species, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. Improve and change the original list of features, and make up details as needed. Separately, give a paragraph backstory with worldbuilding based on the features. Format it for markdown with '## PROFILE', '## BACKGROUND', and bold the item names (e.g.,'**Name**: name'). Be confident. Be very degenerate and cringey."""
             },
             {
                 "role": "user",
@@ -92,3 +93,37 @@ def send_prompt(user_description, vlm_description):
 
     # return actual output
     return response_json["choices"][0]["message"]["content"]
+
+
+def get_img(description):
+    # only take the ## PROFILE bit, before ## BACKGROUND
+    description = description[:description.find("## BACKGROUND")]
+    print(f"DESCRIPTION: {description}")
+    
+    # get local .env vars
+    load_dotenv()
+    client = OpenAI(
+        base_url="https://api.studio.nebius.com/v1/",
+        api_key=os.environ.get("NEBIUS_API_KEY")
+    )
+    
+    response = client.images.generate(
+        model="black-forest-labs/flux-dev",
+        response_format="b64_json",
+        extra_body={
+            "response_extension": "webp",
+            "width": 1024,
+            "height": 1024,
+            "num_inference_steps": 28,
+            "negative_prompt": "",
+            "seed": -1
+        },
+        prompt="Anime-style original character sheet" + str(description)
+    )
+    
+    # print(response.to_json())
+    print("Received image response in base64")
+    response_json = json.loads(response.to_json())
+
+    # return actual output
+    return response_json["data"][0]["b64_json"]
