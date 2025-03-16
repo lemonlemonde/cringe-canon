@@ -32,7 +32,7 @@ def upload_file():
     
     # nebius api
     # send to vlm to get list of features
-    response = send_image(file_path)
+    response = send_image(file_path, description)
     # send features and user description to llm to get profile
     response = send_prompt(description, response)
 

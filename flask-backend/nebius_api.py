@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 import base64
 
-def send_image(file_path):
+def send_image(file_path, description):
     
     
     # Encode the image to base64
@@ -31,12 +31,12 @@ def send_image(file_path):
         messages=[
             {
                 "role": "system",
-                "content": "You are given a drawing of an Original character (OC). Bulletpoint identify things you see in the drawing that are relevant to making a character profile."
+                "content": "You are given a drawing of a character and a short description. Bulletpoint identify things you see in the drawing that are relevant to making a character profile. In addition, try to identify anything like name, age, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote, and don't include sections that are 'unknown'."
             },
             {
                 "role": "user",
                 "content": [
-                    { "type": "text", "text": "img" },
+                    { "type": "text", "text": str(description) },
                     {
                         "type": "image_url",
                         "image_url": {
@@ -68,7 +68,7 @@ def send_prompt(user_description, vlm_description):
     response = client.chat.completions.create(
         model="mistralai/Mixtral-8x22B-Instruct-v0.1",
         max_tokens=1024,
-        temperature=0.5,
+        temperature=0.6,
         top_p=0.9,
         extra_body={
             "top_k": 50
@@ -76,7 +76,7 @@ def send_prompt(user_description, vlm_description):
         messages=[
             {
                 "role": "system",
-                "content": """Given a description and a list of features about an original character (OC) based on a drawing, produce a character profile (name, pronouns, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. Keep it short. Separately, give a paragraph backstory with worldbuilding based on the features. Format it with '## PROFILE' and '## BACKGROUND'. Be confident."""
+                "content": """Given a description and a list of features about an original character (OC) based on a drawing, produce a character profile (name, age, pronouns, relationship status, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. Change the original list of features as needed and make sure no item is 'unknown'. Keep it short. Separately, give a paragraph backstory with worldbuilding based on the features. Format it with '## PROFILE', '## BACKGROUND', and bold the item names with '**'. Be confident."""
             },
             {
                 "role": "user",

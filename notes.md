@@ -1,20 +1,24 @@
 notes.md
 
 ## system prompt:
-You are given a drawing of an Original character (OC) with a brief explanation. Use the traits that you identify in the drawing to make a character profile (name, pronouns, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. And a paragraph backstory with worldbuilding and with traits you see in the drawing. Format it with '## PROFILE' and '## BACKGROUND'.
-
+```
 You are given a drawing of an Original character (OC). Bulletpoint identify things you see in the drawing that are relevant to making a character profile.
-
+```
+```
 Given a description and a list of features about an original character (OC) based on a drawing, produce a character profile (name, pronouns, occupation, education, personality, style, MBTI, hobbies, likes, dislikes, current concerns, quote) in bulletpoints. Also give a paragraph backstory with worldbuilding based on the features. Format it with '## PROFILE' and '## BACKGROUND'. Be confident.
-
+```
 ## example user input:
+```
 Ai.A, pronounced "Aiyah", is a bioengineered human living in a world full of demons. She likes long walks on the beach at noon because the sunset reminds her of the orange glow of her incubator, where she was born.
-
+```
+```
 Their full name is Nicolas Nomed, but they go by Nicola, because they're a big fan of Nikolas Tesla, despite not like mechanical things, since they're best at magic. Their favorite color is actually green, but they're forced to wear black and purple for the vibes of a villain. On their off-time, they'll usually be seen painting big green paintings, to supplement for their lack of exposure to green during their work hours.
-
+```
 
 ## example system output:
 1. From VLM
+
+```
 - Name: Nicolas Nomad
 - Species: Demonio Lujurioso (Lustful Demon)
 - Appearance:
@@ -34,18 +38,19 @@ Their full name is Nicolas Nomed, but they go by Nicola, because they're a big f
   - Smiling, confident demeanor
 - Additional:
   - The character is modeled after a Mobian
+```
 
 
 2. Then add user description, and give both to LLM
+```
 Their full name is Nicolas Nomed, but they go by Nicola, because they're a big fan of Nikolas Tesla, despite not like mechanical things, since they're best at magic. Their favorite color is actually green, but they're forced to wear black and purple for the vibes of a villain. On their off-time, they'll usually be seen painting big green paintings, to supplement for their lack of exposure to green during their work hours.
+```
 
-
-3. 
+3. Send to LLM
 
 ### Mixtral-8x22B-Instruct-v0.1
 
-## PROFILE
-
+```
 ## PROFILE
 
 - **Name**: Nicola Nomed
@@ -70,3 +75,4 @@ Their appearance, a blend of dark purple and black accented with striking green,
 Raised in the mystical city of Lunarfall, Nicola attended the prestigious Magus Academy, where they honed their skills in enchanting arts. The academy's emphasis on creativity and innovation allowed Nicola to explore their unique talents, though they often felt constrained by the rigid traditions of their family. The scars on their back, hidden by their magical prowess, serve as a reminder of their struggles and resilience.
 
 Nicola's journey is one of self-discovery and artistic liberation. They strive to carve out a space where their magical duties and artistic passions coexist harmoniously. In a world that often views them through the lens of their demonic heritage, Nicola remains committed to expressing their true self, one vibrant brushstroke at a time.
+```

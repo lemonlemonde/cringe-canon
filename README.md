@@ -36,3 +36,7 @@ NEBIUS_API_KEY=YOUR_KEY_HERE
 - Tailwind css
 - Flask
 - Nebius AI Studio 
+
+
+### Example
+- `example` contains sample img and description inputs to use, alongside a previous sample output that you can expect.

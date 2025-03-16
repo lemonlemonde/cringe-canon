@@ -59,9 +59,6 @@ export default function Home() {
       const data = await res.json();
       console.log("Response:", data);
 
-      // TODO: do something with the data!
-        // hopefully the model returned two sections:
-          // "PROFILE:" and "BACKGROUND:"
       handleResponse(data);
 
     } catch (e) {
@@ -85,7 +82,7 @@ export default function Home() {
             <input
               ref={inputRef}
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/jpg"
               onChange={handleFileChange}
               className="hidden"
             />
@@ -105,7 +102,7 @@ export default function Home() {
           {/* description input box */}
           <div className="flex flex-col w-full md:pt-3">
             <label htmlFor="textInput" className="mb-2 text-lg text-gray-400">
-              Description:
+              Description and world-building:
             </label>
             <textarea
               type="text"
