@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import os
-from nebius_api import send_image
+from nebius_api import send_image, send_prompt
 
 app = Flask(__name__)
 
@@ -11,6 +11,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # this is the route that frontend will upload to!!
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    # check file and description
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     elif 'description' not in request.form:
@@ -19,6 +20,7 @@ def upload_file():
     file = request.files['file']
     description = request.form['description']
 
+    # check empties
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     elif description == '':
@@ -29,7 +31,10 @@ def upload_file():
     file.save(file_path)
     
     # nebius api
-    response = send_image(file_path, str(description))
+    # send to vlm to get list of features
+    response = send_image(file_path)
+    # send features and user description to llm to get profile
+    response = send_prompt(description, response)
 
     # return so we know it's all good
     return jsonify({

@@ -13,7 +13,7 @@ export default function Home() {
   const [preview, setPreview] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const handleResponse = (data) => {
     setLoading(false)
     if (!data.flaskResponse.response) {
@@ -103,7 +103,7 @@ export default function Home() {
           </div>
           
           {/* description input box */}
-          <div className="flex flex-col w-full md:pt-10">
+          <div className="flex flex-col w-full md:pt-3">
             <label htmlFor="textInput" className="mb-2 text-lg text-gray-400">
               Description:
             </label>
@@ -148,7 +148,7 @@ export default function Home() {
 
           {/* actual results */}
           {!loading && profile && (
-            <div className="w-full prose prose-invert max-w-none px-5">
+            <div className="w-full border p-4 rounded prose prose-invert max-w-none px-5">
               <ReactMarkdown>
                 {profile}
               </ReactMarkdown>

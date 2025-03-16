@@ -12,17 +12,6 @@ export async function POST(request) {
     return Response.json({ message: "No file or description received" }, { status: 400 });
   }
 
-  // const bytes = await file.arrayBuffer();
-  // const buffer = Buffer.from(bytes);
-
-  // Save to /public/uploads directory 
-  // const filename = file.name;
-  // const filePath = path.join(process.cwd(), "public", "uploads", filename);
-  // console.log("YOYOYOYO")
-  // return Response.json({ message: "File uploaded!", filename });
-
-  // await writeFile(filePath, buffer);
-
   // Send to Flask backend
   const res = await fetch("http://localhost:8000/upload", {
     method: "POST",
