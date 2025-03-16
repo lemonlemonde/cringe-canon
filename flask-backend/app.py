@@ -66,13 +66,19 @@ def gen_image():
     
     if 'profile' not in request.form:
         return jsonify({'error': 'No profile part'}), 400
+    elif 'description' not in request.form:
+        return jsonify({'error': 'No description part'}), 400
 
     profile = request.form['profile']
+    description = request.form['description']
     if (profile == ''):
         return jsonify({'error': 'Empty profile'}), 400
+    elif (description == ''):
+        return jsonify({'error': 'Empty description'}), 400
+        
     
     try:
-        new_img = get_img(profile)
+        new_img = get_img(description, profile)
         
         # if it has the prefix "data:image/webp;base64," remove it
         if ',' in new_img:

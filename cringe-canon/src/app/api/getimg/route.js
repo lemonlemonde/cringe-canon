@@ -5,11 +5,12 @@
 export async function POST(request) {
   const formData = await request.formData();
   const profile = formData.get("profile")
-
-  console.log("HIHIHIHI YOURE GETTING IMMAGEs")
+  const description = formData.get("description")
 
   if (!profile) {
     return Response.json({ message: "No profile received" }, { status: 400 });
+  } else if (!description) {
+    return Response.json({ message: "No description received" }, { status: 400 });
   }
 
   // Send to Flask backend
@@ -21,7 +22,7 @@ export async function POST(request) {
   const flaskResponse = await res.json();
 
   return Response.json({
-    message: "Profile uploaded and forwarded to Flask!",
+    message: "Profile and description uploaded and forwarded to Flask!",
     flaskResponse,
   });
 }

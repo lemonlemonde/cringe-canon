@@ -95,10 +95,12 @@ def send_prompt(user_description, vlm_description):
     return response_json["choices"][0]["message"]["content"]
 
 
-def get_img(description):
+def get_img(description, profile):
     # only take the ## PROFILE bit, before ## BACKGROUND
-    description = description[:description.find("## BACKGROUND")]
-    print(f"DESCRIPTION: {description}")
+    profile = profile[:profile.find("## BACKGROUND")]
+    print(f"PROFILE: {profile}")
+    
+    full_description = description + "\n" + profile
     
     # get local .env vars
     load_dotenv()
@@ -118,7 +120,7 @@ def get_img(description):
             "negative_prompt": "",
             "seed": -1
         },
-        prompt="Anime-style original character sheet" + str(description)
+        prompt="Anime-style original character design and concept art. Multiple angles and settings.\n" + str(full_description)
     )
     
     # print(response.to_json())

@@ -17,8 +17,9 @@ export default function Home() {
 
   const handleResponse = (data) => {
     setLoading(false)
-    if (!data.flaskResponse.response) {
-        console.error("Couldn't find API response")
+    if (!data.flaskResponse.profile) {
+        console.error("Couldn't find API profile")
+        return
     }
     // handle the API response
     console.log("ACTUAL PROFILE:", data.flaskResponse.profile)
@@ -64,10 +65,12 @@ export default function Home() {
     } catch (e) {
       console.error("Uploading error:", e)
       setLoading(false)
+      return
     }
 
     const imgFormData = new FormData();
     imgFormData.append("profile", profile);
+    imgFormData.append("description", description)
 
     // request img now
     try {
@@ -100,7 +103,7 @@ export default function Home() {
       </div>
 
       <main className="flex flex-col gap-8 row-start-2 md:items-start max-w-screen-lg w-full space-y-5">
-        <div className="flex md:flex-row flex-col w-full md:space-x-5 space-y-5">
+        <div className="flex md:flex-row flex-col w-full max-w-screen md:space-x-5 space-y-5">
           {/* image */}
           <div className="flex flex-col w-full md:w-xl space-y-2">
             <input
