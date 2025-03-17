@@ -1,8 +1,9 @@
 import os
 import base64
+from datetime import datetime
 
 from flask import Flask, request, jsonify
-from nebius_api import send_image, send_prompt, get_img
+from nebius_api import send_image, send_prompt, get_img, send_chat
 
 app = Flask(__name__)
 
@@ -101,6 +102,55 @@ def gen_image():
             'error': e,
         }), 500
 
+
+@app.route('/uploadChat', methods=['POST'])
+def upload_chat():
+    print("In upload chat API")
+    # check file and description
+    data = request.get_json()
+    
+    print("jsonified...")
+    
+    if (not data):
+        return jsonify({'error': 'No json data was received'}), 400
+    
+    img_base64 = data["img"]
+    chat = data["chat"]
+    profile = data["profile"]
+    
+    print(f"Received img and chat: {chat}")
+    print(f"Received profile: {profile}")
+    
+    if (not img_base64 or not chat or not profile):
+        return jsonify({'error': 'No img, chat, or profile data received'}), 400
+
+    print("Successfully received img, chat, and profile!!")
+
+    # get rid of base64 prefix if exist
+    if (',' in img_base64):
+        img_base64 = img_base64.split(',')[1]
+        
+    # save it!
+    filename = datetime.strftime(datetime.now(), "%Y-%m-%d_%H-%M-%S") + ".png"
+    # bytetify
+    img_bytes = base64.b64decode(img_base64)
+    with open(os.path.join(UPLOAD_FOLDER, filename), 'wb') as f:
+        f.write(img_bytes)
+
+    try:
+        # now actually send to nebius API
+        chat_response = send_chat(img_base64, chat, profile)
+
+        # return
+        return jsonify({
+            'message': 'Received API response successfully',
+            'chat_response': chat_response,
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'message': 'Something went wrong in the API call',
+            'error': e,
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)

@@ -7,8 +7,6 @@ import os
 import base64
 
 def send_image(file_path, description):
-    
-    
     # Encode the image to base64
     with open(file_path, 'rb') as image_file:
         base64_image = base64.b64encode(image_file.read()).decode('utf-8')
@@ -97,6 +95,7 @@ def send_prompt(user_description, vlm_description):
 
 def get_img(description, profile):
     # only take the ## PROFILE bit, before ## BACKGROUND
+    print(f"you're getting image")
     profile = profile[:profile.find("## BACKGROUND")]
     print(f"PROFILE: {profile}")
     
@@ -120,7 +119,7 @@ def get_img(description, profile):
             "negative_prompt": "",
             "seed": -1
         },
-        prompt="Anime-style original character design and concept art. Multiple angles and settings.\n" + str(full_description)
+        prompt="Disney-style original character design and concept art. Multiple angles and settings.\n" + str(full_description)
     )
     
     # print(response.to_json())
@@ -129,3 +128,52 @@ def get_img(description, profile):
 
     # return actual output
     return response_json["data"][0]["b64_json"]
+
+
+
+def send_chat(img_base64, chat, profile):
+    
+    # get local .env vars
+    load_dotenv()
+    client = OpenAI(
+        base_url="https://api.studio.nebius.com/v1/",
+        api_key=os.environ.get("NEBIUS_API_KEY")
+    )
+    
+    # truncate profile
+    profile = profile[:profile.find("## BACKGROUND")]
+    
+    response = client.chat.completions.create(
+        model="Qwen/Qwen2-VL-72B-Instruct",
+        # model="Qwen/QVQ-72B-preview",
+        temperature=0.6,
+        max_tokens=1024,
+        top_p=0.9,
+        extra_body={
+            "top_k": 50
+        },
+        messages=[
+            {
+                "role": "system",
+                "content": "You need to roleplay as a given character. Use what you see in the image to make conversation, and be specific. You are the character: " + profile
+            },
+            {
+                "role": "user",
+                "content": [
+                    { "type": "text", "text": chat },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/png;base64,{img_base64}",
+                        },
+                    },
+                ],
+            }
+        ],
+    )
+    
+    print(response.to_json())
+    response_json = json.loads(response.to_json())
+
+    # return actual output
+    return response_json["choices"][0]["message"]["content"]
