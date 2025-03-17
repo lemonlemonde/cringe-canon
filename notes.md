@@ -27,7 +27,7 @@ you're a conversational chatbot. Use what you see in the image to make conversat
 
 ## example user input:
 ```
-Ai.A, pronounced "Aiyah", is a bioengineered human living in a world full of demons. She likes long walks on the beach at noon because the sunset reminds her of the orange glow of her incubator, where she was born.
+Ai.A, pronounced "Aiyah", is a bioengineered bunny-human living in a world full of demons. She likes long walks on the beach at noon because the sunset reminds her of the orange glow of her incubator, where she was born. She has an eye-demon trapped in her massive hammer. It's unwilling, but cooperates during combat.
 ```
 ```
 Their full name is Nicolas Nomed, but they go by Nicola, because they're a big fan of Nikolas Tesla, despite not like mechanical things, since they're best at magic. Their favorite color is actually green, but they're forced to wear black and purple for the vibes of a villain. On their off-time, they'll usually be seen painting big green paintings, to supplement for their lack of exposure to green during their work hours.

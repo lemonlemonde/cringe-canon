@@ -96,7 +96,8 @@ def send_prompt(user_description, vlm_description):
 def get_img(description, profile):
     # only take the ## PROFILE bit, before ## BACKGROUND
     print(f"you're getting image")
-    profile = profile[:profile.find("## BACKGROUND")]
+    if ("## BACKGROUND" in profile):
+        profile = profile[:profile.find("## BACKGROUND")]
     print(f"PROFILE: {profile}")
     
     full_description = description + "\n" + profile
@@ -110,6 +111,7 @@ def get_img(description, profile):
     
     response = client.images.generate(
         model="black-forest-labs/flux-dev",
+        # model="stability-ai/sdxl",
         response_format="b64_json",
         extra_body={
             "response_extension": "webp",
@@ -119,7 +121,7 @@ def get_img(description, profile):
             "negative_prompt": "",
             "seed": -1
         },
-        prompt="Disney-style original character design and concept art. Multiple angles and settings.\n" + str(full_description)
+        prompt="Disney-style original character design and concept art in the proper world setting.\n" + str(full_description)
     )
     
     # print(response.to_json())
