@@ -4,6 +4,8 @@ takes your cringe, makes it canon
 (Created for [Visionary Hack](https://www.sprint.dev/hackathons/visionaryhack), sponsored by Nebius AI Studio, hosted by Sprint.dev)
 March 14, 2025 12:00 PDT - March 16, 2025 20:00 PDT
 
+![youtube](https://www.youtube.com/watch?v=BPxekdd8YyU)
+
 ## Quick start (frontend)
 ```bash
 cd cringe-canon
